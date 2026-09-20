@@ -1,0 +1,11 @@
+## Interface: 120100
+## Version: 12.1.0
+## Title: |cFFFF7139Find Your Feet|r    
+## Notes: Turns on Self Highlight automatically in dungeons and raids.
+## Author: TheVonKanar
+## IconTexture: Interface\AddOns\FindYourFeet\Icon
+## SavedVariables: FindYourFeetDB
+
+embeds.xml
+
+Core.lua
