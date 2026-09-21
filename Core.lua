@@ -1,19 +1,22 @@
 FindYourFeet = LibStub("AceAddon-3.0"):NewAddon("FindYourFeet", "AceEvent-3.0", "AceConsole-3.0")
 
-function FindYourFeet:OnInitialize()
-	self.db = LibStub("AceDB-3.0"):New("FindYourFeetDB", {
-		global = {
-			verbose    = true,
-			highlights = {
-				circle = true,
-				icon   = true
-			},
-			locations  = {
-				party = true,
-				raid  = true
-			}
+FindYourFeet.DEFAULTS = {
+	global = {
+		verbose    = true,
+		highlights = {
+			circle  = true,
+			icon    = true,
+			outline = false
+		},
+		locations  = {
+			party = true,
+			raid  = true
 		}
-	}, true)
+	}
+}
+
+function FindYourFeet:OnInitialize()
+	self.db = LibStub("AceDB-3.0"):New("FindYourFeetDB", self.DEFAULTS, true)
 	self:RegisterChatCommand("fyf", "ProcessSlashCommand")
 end
 
@@ -42,6 +45,7 @@ function FindYourFeet:Refresh(silent)
 		 (instanceType == "raid" and self.db.global.locations.raid) then
 		SetCVar("findYourselfModeCircle", self.db.global.highlights.circle)
 		SetCVar("findYourselfModeIcon", self.db.global.highlights.icon)
+		SetCVar("findYourselfModeOutline", self.db.global.highlights.outline)
 
 		if self.db.global.verbose and not silent then
 			self:Print("Self Highlight is currently active.")
@@ -49,6 +53,7 @@ function FindYourFeet:Refresh(silent)
 	else
 		SetCVar("findYourselfModeCircle", false)
 		SetCVar("findYourselfModeIcon", false)
+		SetCVar("findYourselfModeOutline", false)
 
 		if self.db.global.verbose and not silent then
 			self:Print("Self Highlight is currently inactive.")
@@ -59,11 +64,12 @@ end
 function FindYourFeet:ProcessSlashCommand(input)
 	if input == "" then
 		self:Print("available commands:\r" ..
-			"|cFFFF7139/fyf circle|r : Toggle the circle highlight around your feet\r" ..
-			"|cFFFF7139/fyf icon|r : Toggle the icon highlight above your head\r" ..
-			"|cFFFF7139/fyf party|r : Toggle the automatic activation of enabled highlights while in 5-man instances\r" ..
-			"|cFFFF7139/fyf raid|r : Toggle the automatic activation of enabled highlights while in raids\r" ..
-			"|cFFFF7139/fyf verbose|r : Toggle the chat messages sent when Self highlights gets enabled or disabled")
+			"/fyf circle : Toggle the circle highlight below your character (default: true)\r" ..
+			"/fyf icon : Toggle the icon highlight above your character (default: true)\r" ..
+			"/fyf outline : Toggle the outline highlight around your character (default: false)\r" ..
+			"/fyf party : Toggle the automatic activation of enabled highlights while in 5-man instances (default: true)\r" ..
+			"/fyf raid : Toggle the automatic activation of enabled highlights while in raids (default: true)\r" ..
+			"/fyf verbose : Toggle the chat messages sent when Self highlights gets enabled or disabled (default: true)")
 		return
 	end
 
@@ -86,6 +92,18 @@ function FindYourFeet:ProcessSlashCommand(input)
 		else
 			self.db.global.highlights.icon = true
 			self:Print("Icon Highlight is now enabled.")
+		end
+		self:Refresh(true)
+		return
+	end
+
+	if input == "outline" then
+		if self.db.global.highlights.outline then
+			self.db.global.highlights.outline = false
+			self:Print("Outline Highlight is now disabled.")
+		else
+			self.db.global.highlights.outline = true
+			self:Print("Outline Highlight is now enabled.")
 		end
 		self:Refresh(true)
 		return
