@@ -134,7 +134,13 @@ function FindYourFeet:ProcessSlashCommand(input)
 	end
 
 	if input == "verbose" then
-		self.db.profile.verbose = not self.db.profile.verbose
+		if self.db.global.verbose then
+			self.db.global.verbose = false
+			self:Print("Messages will no longer be printed in the chat when Self Highlight activates/deactivates.")
+		else
+			self.db.global.verbose = true
+			self:Print("Messages will be printed in the chat when Self Highlight activates/deactivates.")
+		end
 		return
 	end
 end
