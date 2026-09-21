@@ -44,14 +44,14 @@ function FindYourFeet:Refresh(silent)
 		SetCVar("findYourselfModeIcon", self.db.global.highlights.icon)
 
 		if self.db.global.verbose and not silent then
-			self:Print("Self Highlight is enabled in here.")
+			self:Print("Self Highlight is currently active.")
 		end
 	else
 		SetCVar("findYourselfModeCircle", false)
 		SetCVar("findYourselfModeIcon", false)
 
 		if self.db.global.verbose and not silent then
-			self:Print("Self Highlight is disabled in here.")
+			self:Print("Self Highlight is currently inactive.")
 		end
 	end
 end
